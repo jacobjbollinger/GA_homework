@@ -3,23 +3,25 @@ import urllib
 import os
 import time
 
-dir_out = 'yahoo_data_in_class'
-
+dir_out = '/home/jacob/data/yahoo_finance_data'
 if not os.path.exists(dir_out):
     os.mkdir(dir_out)
     print 'created directory %s' % dir_out
 
+threshold = 25
 symbols = ['FB']
 tmp =[]
 
 for symbol in symbols:
     time.sleep(.5)
     data_out = {}
+    threshold_l = 'less than %s' % threshold
+    threshold_h = 'more than %s' % threshold
     try:
-        if 'less than 15' not in data_out:
-            data_out['less than 15']=0
-        if 'more than 15' not in data_out:
-            data_out['more than 15']=0
+        if threshold_l not in data_out:
+            data_out[threshold_l]=0
+        if threshold_h not in data_out:
+            data_out[threshold_h]=0
         url = 'http://ichart.finance.yahoo.com/table.csv?s=%s&d=6&e=24&f=2013&g=d&a=4&b=18&c=2012&ignore=.csv' % (symbol)
         data = urllib.urlopen(url).read()
         print data
@@ -34,10 +36,10 @@ for symbol in symbols:
                 d = d.split(',')
                 close = d[6]
                 tmp.append(close)
-                if float(close)>=float(15):
-                    data_out['more than 15']+=1
-                elif float(close)<float(15):
-                    data_out['less than 15']+=1
+                if float(close)>=float(threshold):
+                    data_out[threshold_h]+=1
+                elif float(close)<float(threshold):
+                    data_out[threshold_l]+=1
             except:pass
     except:pass
     print json.dumps(data_out)
