@@ -36,11 +36,14 @@ for symbol in symbols:
                 d = d.split(',')
                 close = d[6]
                 tmp.append(close)
+
                 if float(close)>=float(threshold):
                     data_out[threshold_h]+=1
                 elif float(close)<float(threshold):
                     data_out[threshold_l]+=1
+
             except:pass
     except:pass
-    print json.dumps(data_out)
-
+    f = open('test_dump.json','w')
+    f.write('%s' % json.dumps(data_out))
+    f.close()
